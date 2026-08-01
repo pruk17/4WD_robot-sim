@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================= -->
+  <!--  Model-level Gazebo (gz-sim Harmonic) systems.                    -->
+  <!--  No built-in swerve plugin exists, so each joint gets its own     -->
+  <!--  controller and the IK is done by swerve_controller.py.           -->
+  <!-- ================================================================= -->
+
+  <!-- publish joint positions -> /world/empty/model/swerve_bot/joint_state -->
+  <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system"
+            name="gz::sim::systems::JointStatePublisher"/>
+  </gazebo>
+
+  <!-- STEER: position-controlled (PID). Subscribes gz.msgs.Double on <prefix>_steer_cmd -->
+  <xacro:macro name="steer_ctrl" params="prefix">
+    <gazebo>
+      <plugin filename="gz-sim-joint-position-controller-system"
+              name="gz::sim::systems::JointPositionController">
+        <joint_name>${prefix}_steer_joint</joint_name>
+        <topic>${prefix}_steer_cmd</topic>
+        <p_gain>18.0</p_gain>
+        <i_gain>0.4</i_gain>
+        <d_gain>1.2</d_gain>
+        <i_max>5.0</i_max>
+        <i_min>-5.0</i_min>
+        <cmd_max>60.0</cmd_max>
+        <cmd_min>-60.0</cmd_min>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- DRIVE: velocity-controlled. Subscribes gz.msgs.Double on <prefix>_drive_cmd -->
+  <xacro:macro name="drive_ctrl" params="prefix">
+    <gazebo>
+      <plugin filename="gz-sim-joint-controller-system"
+              name="gz::sim::systems::JointController">
+        <joint_name>${prefix}_wheel_joint</joint_name>
+        <topic>${prefix}_drive_cmd</topic>
+        <use_force_commands>false</use_force_commands>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:steer_ctrl prefix="fl"/>
+  <xacro:steer_ctrl prefix="fr"/>
+  <xacro:steer_ctrl prefix="bl"/>
+  <xacro:steer_ctrl prefix="br"/>
+
+  <xacro:drive_ctrl prefix="fl"/>
+  <xacro:drive_ctrl prefix="fr"/>
+  <xacro:drive_ctrl prefix="bl"/>
+  <xacro:drive_ctrl prefix="br"/>
+
+</robot>

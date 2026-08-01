@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- Master file: assembles the whole robot by including the modules. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="swerve_bot">
+
+  <!-- macro libraries first (define before use) -->
+  <xacro:include filename="inertial_macros.xacro"/>
+  <xacro:include filename="swerve_module.xacro"/>
+
+  <!-- robot body + wheels + sensor + controllers -->
+  <xacro:include filename="robot_core.xacro"/>
+  <xacro:include filename="lidar.xacro"/>
+  <xacro:include filename="gazebo_control.xacro"/>
+
+</robot>

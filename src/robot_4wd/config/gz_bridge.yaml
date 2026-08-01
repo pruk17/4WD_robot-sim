@@ -1,0 +1,67 @@
+# ros_gz_bridge parameter_bridge config.
+# Maps Gazebo (gz) topics <-> ROS 2 topics.
+
+# --- clock (sim time) ---
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# --- LiDAR scan ---
+- ros_topic_name: "/scan"
+  gz_topic_name: "/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+# --- joint states (for robot_state_publisher / RViz) ---
+- ros_topic_name: "/joint_states"
+  gz_topic_name: "/world/empty/model/swerve_bot/joint_state"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+
+# --- STEER position commands (ROS -> GZ) ---
+- ros_topic_name: "/fl_steer_cmd"
+  gz_topic_name: "fl_steer_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/fr_steer_cmd"
+  gz_topic_name: "fr_steer_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/bl_steer_cmd"
+  gz_topic_name: "bl_steer_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/br_steer_cmd"
+  gz_topic_name: "br_steer_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+# --- DRIVE velocity commands (ROS -> GZ) ---
+- ros_topic_name: "/fl_drive_cmd"
+  gz_topic_name: "fl_drive_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/fr_drive_cmd"
+  gz_topic_name: "fr_drive_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/bl_drive_cmd"
+  gz_topic_name: "bl_drive_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/br_drive_cmd"
+  gz_topic_name: "br_drive_cmd"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
