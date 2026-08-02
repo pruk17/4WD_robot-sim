@@ -26,16 +26,16 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64
 
-# Module positions relative to base_link center [m] (x forward, y left).
-# Must match description/swerve_module.xacro.
+# Steer-axis positions relative to base_link center [m] (x forward, y left).
+# = the wheel COLUMN (cx/cy) in description/robot_core_mesh.xacro.
 MODULES = {
-    'fl': (0.165, 0.165),
-    'fr': (0.165, -0.165),
-    'bl': (-0.165, 0.165),
-    'br': (-0.165, -0.165),
+    'fl': (0.26, 0.26),
+    'fr': (0.26, -0.26),
+    'bl': (-0.26, 0.26),
+    'br': (-0.26, -0.26),
 }
 
-WHEEL_RADIUS = 0.0635  # 5 inch diameter / 2 [m]
+WHEEL_RADIUS = 0.064  # 5 inch wheel radius [m]
 
 
 def wrap(angle):

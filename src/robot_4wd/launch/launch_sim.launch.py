@@ -19,12 +19,14 @@ def launch_setup(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration('use_sim_time').perform(context) == 'true'
     gui = LaunchConfiguration('gui').perform(context) == 'true'
     use_nvidia = LaunchConfiguration('use_nvidia').perform(context) == 'true'
+    model = LaunchConfiguration('model').perform(context)  # 'mesh' or 'box'
     world = LaunchConfiguration('world').perform(context)
     if not os.path.isabs(world):
         world = os.path.join(pkg, 'worlds', world)
 
-    # xacro -> URDF string
-    xacro_file = os.path.join(pkg, 'description', 'robot.urdf.xacro')
+    # xacro -> URDF string  (model:=mesh uses the real .glb, model:=box the primitives)
+    xacro_name = 'robot_mesh.urdf.xacro' if model == 'mesh' else 'robot.urdf.xacro'
+    xacro_file = os.path.join(pkg, 'description', xacro_name)
     robot_description = xacro.process_file(xacro_file).toxml()
     bridge_config = os.path.join(pkg, 'config', 'gz_bridge.yaml')
 
@@ -78,6 +80,9 @@ def launch_setup(context, *args, **kwargs):
     )
 
     actions = []
+    # let Gazebo resolve package://robot_4wd/meshes/*.glb
+    actions.append(SetEnvironmentVariable(
+        'GZ_SIM_RESOURCE_PATH', os.path.dirname(pkg)))
     if use_nvidia:
         # On NVIDIA Optimus/PRIME laptops the Gazebo Sensors system fails to
         # create an offscreen EGL context on the discrete GPU (libEGL "failed
@@ -102,6 +107,8 @@ def generate_launch_description():
                               description='also open RViz2'),
         DeclareLaunchArgument('world', default_value='empty.sdf',
                               description='world file (name in worlds/ or absolute path)'),
+        DeclareLaunchArgument('model', default_value='mesh',
+                              description="'mesh' = real .glb model, 'box' = simple primitives"),
         DeclareLaunchArgument('use_nvidia', default_value='true',
                               description='force offscreen EGL onto the NVIDIA GPU '
                                           '(needed on Optimus laptops for gpu_lidar). '
